@@ -36,59 +36,59 @@ var currentLabel0 = window.document.getElementById("current-0");
 var currentLabel1 = window.document.getElementById("current-1");
 var scoreLabel0 = window.document.getElementById("score-0");
 var scoreLabel1 = window.document.getElementById("score-1");
-currentLabel0.textContent = 0;
-currentLabel1.textContent = 0;
-scoreLabel0.textContent = 0;
-scoreLabel1.textContent = 0;
-rollDom.style.display = "none";
-rollDom.style.display = "block";
+function startState() {
+    window.document.querySelector(".player-0-panel").classList.add("active");
+    window.document.querySelector(".player-1-panel").classList.remove("active");
+    activePlayer = 0;
+    roundScore = 0;
+    score = [0, 0];
+    currentLabel0.textContent = 0;
+    currentLabel1.textContent = 0;
+    scoreLabel0.textContent = 0;
+    scoreLabel1.textContent = 0;
+    rollDom.style.display = "none";
+    rollDom.style.display = "block";
+}
+startState();
 /////////////////////////BTN_ROLL
 document.querySelector(".btn-roll").addEventListener("click", function () {
     state = 1;
+    // rollDom.style.display = "block";
     t = Math.floor(Math.random() * 6) + 1;
     rollDom.src = "dice-" + t + ".png";
     if (t !== 1) roundScore = roundScore + t;
     else {
-        // console.log(activePlayer);
-        if (activePlayer !== 0) {
-            window.document.querySelector(".player-0-panel").classList.remove("active");
-            window.document.querySelector(".player-1-panel").classList.add("active");
-        } else {
-            window.document.querySelector(".player-0-panel").classList.add("active");
-            window.document.querySelector(".player-1-panel").classList.remove("active");
-        }
-
         roundScore = 0;
-        //  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
-        if (activePlayer == 0) activePlayer = 1;
-        else activePlayer = 0;
-        currentLabel0.textContent = 0;
-        currentLabel1.textContent = 0;
+        calc();
     }
     if (activePlayer === 0) currentLabel0.textContent = roundScore;
     else currentLabel1.textContent = roundScore;
 });
 /////////////////////////BNT_HOLD
-document.querySelector(".btn-hold").addEventListener("click", function () {
+document.querySelector(".btn-hold").addEventListener("click", calc);
+document.querySelector(".btn-new").addEventListener("click", startState);
+
+function calc() {
     if (state === 1) {
         state = 0;
         console.log(activePlayer);
-        if (activePlayer === 0) score[0] = score[0] + roundScore;
-        else score[1] = score[1] + roundScore;
-        //  activePlayer === 0 ? (activePlayer = 1) : (activePlayer = 0);
+        score[activePlayer] = score[activePlayer] + roundScore;
+        window.document.getElementById("score-" + activePlayer).textContent = score[activePlayer];
+        if (score[activePlayer] >= 20) {
+            window.document.getElementById("name-" + activePlayer).textContent = "WINNER GOOD LUCK";
+            window.document.querySelector(".player-" + activePlayer + "-panel").classList.add("winner");
+        }
+        //  scoreLabel0.textContent = score[0];
+        //  scoreLabel1.textContent = score[1];
+
         if (activePlayer == 0) activePlayer = 1;
         else activePlayer = 0;
-        scoreLabel0.textContent = score[0];
-        scoreLabel1.textContent = score[1];
+
         roundScore = 0;
         currentLabel0.textContent = 0;
         currentLabel1.textContent = 0;
-        if (activePlayer !== 0) {
-            window.document.querySelector(".player-0-panel").classList.remove("active");
-            window.document.querySelector(".player-1-panel").classList.add("active");
-        } else {
-            window.document.querySelector(".player-0-panel").classList.add("active");
-            window.document.querySelector(".player-1-panel").classList.remove("active");
-        }
+        window.document.querySelector(".player-0-panel").classList.toggle("active");
+        window.document.querySelector(".player-1-panel").classList.toggle("active");
+        // rollDom.style.display = "none";
     }
-});
+}

@@ -74,7 +74,7 @@ function calc() {
         console.log(activePlayer);
         score[activePlayer] = score[activePlayer] + roundScore;
         window.document.getElementById("score-" + activePlayer).textContent = score[activePlayer];
-        if (score[activePlayer] >= 20) {
+        if (score[activePlayer] >= 100) {
             window.document.getElementById("name-" + activePlayer).textContent = "WINNER GOOD LUCK";
             window.document.querySelector(".player-" + activePlayer + "-panel").classList.add("winner");
         }
